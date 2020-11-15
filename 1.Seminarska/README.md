@@ -1,2 +1,2 @@
 # Komunikacija Človek Računalnik
-Seminarske naloge pri predmetu magisterskem predmetu Komunikacija Človek Računalnik
+Prva seminarska naloga narejena v okolju electron. Za zagon se najprej napiše ukaz npm install in potem npm start
