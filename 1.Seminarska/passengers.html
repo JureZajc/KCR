@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html lang="en">
+
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"/>
+            <title>Potniki</title>
+            <link rel="stylesheet" href="css/styles.css">
+        </head>
+
+<body>
+
+<div id="search-form">
+    <div id="header">
+        <h1>POTNIKI</h1>
+    </div>
+    <section>
+        <div class="flight" id="flightbox">
+
+            <div id="flight-type">
+                <div class="info-box">
+                    <input type="radio" name="time" value="Morning" id="morning" checked/>
+                    <label for="return">JUTRANJI LET</label>
+                </div>
+                <div class="info-box">
+                    <input type="radio" name="time" value="Noon" id="noon"/>
+                    <label for="one-way">OPOLDANSKI LET</label>
+                </div>
+                <div class="info-box">
+                    <input type="radio" name="time" value="Evening" id="evening" checked/>
+                    <label for="return">VEČERSKI LET</label>
+                </div>
+            </div>
+
+
+            <!-- SEARCH BUTTON -->
+            <div id="flight-search">
+                <div class="info-box">
+                    <input type="submit" id="search-flight" value="POTRDI" onclick="location.href='payment.html'"/>
+                </div>
+            </div>
+
+            <div id="flight-search2">
+                <div class="info-box">
+                    <input type="reset" id="search-flight" value="POČISTI POLJA"/>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div id="calender">
+        <button id="prev">
+        </button>
+        <p><span id="month"></span>
+            <span id="year"></span></p>
+        <button id="next"></button>
+        <table id="cal"></table>
+    </div>
+
+</div>
+<div id="confirm"></div>
+
+
+</body>
+<script>
+    const departFrom = sessionStorage.getItem("departFrom");
+    //document.write(departFrom);
+    const adults = +sessionStorage.getItem("adults");  // + pred stringom, je isto kot parseInt(string)
+    const children = +sessionStorage.getItem("children"); // + pred stringom, je isto kot parseInt(string)
+    const passengers = adults + children;
+
+    //document.write(passengers.toString());
+
+    function singlePassenger(_, idx) {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = `\n                <!-- FROM/TO -->
+        <div id="flight-depart">
+        <div class="info-box">
+        <label for="">IME</label>
+        <input type="text" id="ime.${idx}" />
+        </div>
+        <div class="info-box" id="arrive-box">
+        <label for="">PRIIMEK</label>
+        <input type="text" id="priimek.${idx}" />
+        </div>
+        </div>
+
+        <div id="flight-depart">
+        <div class="info-box">
+        <label for="">ŠTEVILKA POTNEGA LISTA</label>
+        <input type="text" id="potniList.${idx}" />
+        </div>
+        <div class="info-box" id="arrive-box">
+        <label for="">NASLOV</label>
+        <input type="text" id="naslov.${idx}" />
+        </div>
+        </div>
+
+
+            <!-- TRIP TYPE -->
+        <div id="flight-type">
+        <div class="info-box">
+        <input type="radio" name="baggage.${idx}" id="baggage.${idx}" checked />
+        <label for="baggage.${idx}">DODATNA PRTLJAGA (dodatek 50€)</label>
+        </div>
+        <div class="info-box">
+        <input type="radio" name="baggage.${idx}" id="nobaggage.${idx}" />
+        <label for="nobaggage.${idx}">BREZ DODATNE PRTLJAGE</label>
+        </div>
+        <div class="info-box">
+        <input type="radio" name="food.${idx}" value="vegan" id="vegan.${idx}" checked />
+        <label for="vegan.${idx}">VEGANSKI OBROK</label>
+        </div>
+        <div class="info-box">
+        <input type="radio" name="food.${idx}" value="meat" id="meat.${idx}" />
+        <label for="meat.${idx}">MESNI OBROK</label>
+        </div>
+        </div>
+        `
+        ;
+        return wrapper;
+    }
+
+        function renderForm(numberOfPassengers) {
+            const arrFields = [...Array(numberOfPassengers)].map(singlePassenger);
+            arrFields.forEach(form => document.getElementById('flightbox').prepend(form));
+        }
+
+        renderForm(passengers);
+</script>
+</html></title>
+</head>
+<body>
+
+</body>
+</html>

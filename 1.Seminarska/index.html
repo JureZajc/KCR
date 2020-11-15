@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <title>Iskanje letov KCR</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"/>
+    <link rel="stylesheet" href="css/styles.css">
+
+</head>
+<body>
+
+
+<div id="search-form">
+    <div id="header">
+        <h1>POIŠČI SVOJ LET</h1>
+    </div>
+    <section>
+        <div class="flight" id="flightbox">
+
+            <form id="flight-form">
+                <!-- TRIP TYPE -->
+                <div id="flight-type">
+                    <div class="info-box">
+                        <input type="radio" name="flight-type" value="Return" id="return" checked/>
+                        <label for="return">POVRATNI</label>
+                    </div>
+                    <div class="info-box">
+                        <input type="radio" name="flight-type" value="Single" id="one-way"/>
+                        <label for="one-way">ENOSMERNI</label>
+                    </div>
+                </div>
+
+                <!-- FROM/TO -->
+                <div id="flight-depart">
+                    <div class="info-box">
+                        <label for="">ODHOD IZ KRAJA</label>
+                        <input type="text" id="dep-from" required/>
+                        <div id="depart-res"></div>
+                    </div>
+                    <div class="info-box" id="arrive-box">
+                        <label for="">PRIHOD V KRAJ</label>
+                        <input type="text" id="dep-to" required/>
+                        <div id="arrive-res"></div>
+                    </div>
+                </div>
+
+                <!-- FROM/TO -->
+                <div id="flight-dates">
+                    <div class="info-box">
+                        <label for="">ODHOD LETA</label>
+                        <input type="text" id="leave-date" readonly required/>
+                    </div>
+                    <div class="info-box" id="return-box">
+                        <label for="">VRAČILO LETA</label>
+                        <input type="text" id="return-date" readonly/>
+                    </div>
+                </div>
+
+                <!-- PASSENGER INFO -->
+                <div id="flight-info">
+                    <div class="info-box">
+                        <label for="adults">ODRASLI</label>
+                        <select name="adults" id="adults">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                    </div>
+                    <div class="info-box">
+                        <label for="children">OTROCI</label>
+                        <select name="children" id="children">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div class="info-box">
+                        <label for="class-type">RAZRED</label>
+                        <select name="class-type" id="class-type">
+                            <option value="Ekonomskim razredom">EKONOMSKI RAZRED</option>
+                            <option value="Poslovnim razredom">POSLOVNI RAZRED</option>
+                            <option value="Prvim razredom">PRVI RAZRED</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- SEARCH BUTTON -->
+                <div id="flight-search">
+                    <div class="info-box">
+                        <input type="submit" id="search-flight" value="POIŠČI LETE" onclick="showButton()"/>
+                    </div>
+                </div>
+
+                <div id="flight-search2">
+                    <div class="info-box">
+                        <input type="reset" id="search-flight" value="POČISTI POLJA"/>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </section>
+
+    <div id="calender">
+        <div class="nav">
+            <button id="prev"><</button>
+            <p><span id="month"></span>
+                <span id="year"></span></p>
+            <button id="next">></button>
+        </div>
+        <table id="cal"></table>
+    </div>
+
+</div>
+<div id="confirm"></div>
+
+
+<div id="showButton2" style="display: none">
+    <button onclick="location.href='passengers.html'" type="button"
+            style="background: #55AF3A; color: white; height: 50px;font-size: 1.2em; width: 700px">POTRDI
+    </button>
+</div>
+
+
+</body>
+<script src="js/script.js"></script>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"/>
+    <title>Plačilo</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div id="search-form">
+    <div id="header">
+        <h1>PLAČILO S KARTICO</h1>
+    </div>
+    <section>
+        <div class="flight" id="flightbox">
+
+            <!-- FROM/TO -->
+            <div id="flight-depart">
+                <div class="info-box">
+                    <label for="">POLNO IME PLAČNIKA</label>
+                    <input type="text" id="ime"/>
+                    <div id="depart-res"></div>
+                </div>
+                <div class="info-box" id="arrive-box">
+                    <label for="">NASLOV PLAČNIKA</label>
+                    <input type="text" id="naslov"/>
+                    <div id="arrive-res"></div>
+                </div>
+            </div>
+
+            <div id="flight-depart">
+                <div class="info-box">
+                    <label for="">MESTO</label>
+                    <input type="text" id="mesto"/>
+                    <div id="depart-res"></div>
+                </div>
+                <div class="info-box" id="arrive-box">
+                    <label for="">DRŽAVA</label>
+                    <input type="text" id="drzava"/>
+                    <div id="arrive-res"></div>
+                </div>
+            </div>
+
+            <!-- FROM/TO -->
+            <div id="flight-depart">
+                <div class="info-box">
+                    <label for="">IME NA KARTICI</label>
+                    <input type="text" id="imeNaKartici"/>
+                    <div id="depart-res"></div>
+                </div>
+                <div class="info-box" id="arrive-box">
+                    <label for="cc-number">ŠTEVILKA BANČNE KARTICE</label>
+                    <input type="tel" id="bank" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="cc-number"
+                           maxlength="19" placeholder="xxxx-xxxx-xxxx-xxxx" required/>
+                    <div id="arrive-res"></div>
+                </div>
+            </div>
+
+            <div id="flight-depart">
+                <div class="info-box">
+                    <label for="">MESEC IN LETO EKSPIRACIJE</label>
+                    <input type="month" id="exp" required min="2020-11"/>
+                    <div id="depart-res"></div>
+                </div>
+
+                <div class="info-box" id="arrive-box">
+                    <label for="">CVV</label>
+                    <input type="tel" id="cvv" inputmode="numeric" pattern="[0-9\s]{13,19" autocomplete="cc-csc"/>
+                    <div id="arrive-res"></div>
+                </div>
+            </div>
+            <div id="flight-search">
+                <div class="info-box">
+                    <input type="submit" id="search-flight" value="POTRDI" onclick="myFunction()"/>
+                </div>
+            </div>
+
+            <div id="flight-search2">
+                <div class="info-box">
+                    <input type="reset" id="search-flight" value="POČISTI POLJA"/>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</div>
+
+<script>
+    function myFunction() {
+        alert("Rezervacija je potrjena!");
+    }
+</script>
+
+</div>
+
+</body>
+</html>
