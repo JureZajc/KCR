@@ -14,12 +14,13 @@
     </div>
     <section>
         <div class="flight" id="flightbox">
+            <form id="flight-form" onsubmit="myFunction()">
 
             <!-- FROM/TO -->
             <div id="flight-depart">
                 <div class="info-box">
                     <label for="">POLNO IME PLAČNIKA</label>
-                    <input type="text" id="ime"/>
+                    <input type="text" id="ime" required/>
                     <div id="depart-res"></div>
                 </div>
                 <div class="info-box" id="arrive-box">
@@ -32,12 +33,12 @@
             <div id="flight-depart">
                 <div class="info-box">
                     <label for="">MESTO</label>
-                    <input type="text" id="mesto"/>
+                    <input type="text" id="mesto" required/>
                     <div id="depart-res"></div>
                 </div>
                 <div class="info-box" id="arrive-box">
                     <label for="">DRŽAVA</label>
-                    <input type="text" id="drzava"/>
+                    <input type="text" id="drzava" required/>
                     <div id="arrive-res"></div>
                 </div>
             </div>
@@ -46,13 +47,15 @@
             <div id="flight-depart">
                 <div class="info-box">
                     <label for="">IME NA KARTICI</label>
-                    <input type="text" id="imeNaKartici"/>
+                    <input type="text" id="imeNaKartici" required/>
                     <div id="depart-res"></div>
                 </div>
                 <div class="info-box" id="arrive-box">
                     <label for="cc-number">ŠTEVILKA BANČNE KARTICE</label>
-                    <input type="tel" id="bank" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="cc-number"
-                           maxlength="19" placeholder="xxxx-xxxx-xxxx-xxxx" required/>
+                    <input type="text" id="creditCard"
+                           placeholder="0000-0000-0000-0000"
+                           onkeyup="myFunction2()"
+                           pattern="([0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4})" maxlength="19" required>
                     <div id="arrive-res"></div>
                 </div>
             </div>
@@ -65,14 +68,14 @@
                 </div>
 
                 <div class="info-box" id="arrive-box">
-                    <label for="">CVV</label>
-                    <input type="tel" id="cvv" inputmode="numeric" pattern="[0-9\s]{13,19" autocomplete="cc-csc"/>
+                    <label for="cc-csc">CVV</label>
+                    <input type="tel" id="cvv" inputmode="numeric" pattern="[0-9\s]{3}" autocomplete="cc-csc" maxlength="3"/>
                     <div id="arrive-res"></div>
                 </div>
             </div>
             <div id="flight-search">
                 <div class="info-box">
-                    <input type="submit" id="search-flight" value="POTRDI" onclick="myFunction()"/>
+                    <input type="submit" id="search-flight" value="POTRDI" />
                 </div>
             </div>
 
@@ -81,6 +84,7 @@
                     <input type="reset" id="search-flight" value="POČISTI POLJA"/>
                 </div>
             </div>
+            </form>
         </div>
 
     </section>
@@ -89,6 +93,15 @@
 <script>
     function myFunction() {
         alert("Rezervacija je potrjena!");
+    }
+
+    function myFunction2() {
+        const x = document.getElementById("creditCard");
+        let creditCard = x.value.split("-").join("");
+        if (creditCard.length > 0) {
+            creditCard = creditCard.match(new RegExp('.{1,4}', 'g')).join("-");
+        }
+        x.value = creditCard;
     }
 </script>
 
