@@ -56,7 +56,7 @@ body {
     font-size: .9em;
 }
 
-.info-box input[type=text], input[type=submit], input[type=month], input[type=tel], input[type=reset], select {
+.info-box input[type=text], input[type=submit], input[type=month], input[type=tel], input[type=reset], input[type=email], select {
     border: none;
     outline: none;
     background: #E2E0E0;
