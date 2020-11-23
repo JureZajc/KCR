@@ -20,34 +20,44 @@
             <div id="flight-depart">
                 <div class="info-box">
                     <label for="">POLNO IME PLAČNIKA</label>
-                    <input type="text" id="ime" required/>
+                    <input type="text" placeholder="Vnesite ime in priimek plačnik" id="ime" required/>
                     <div id="depart-res"></div>
                 </div>
                 <div class="info-box" id="arrive-box">
                     <label for="">NASLOV PLAČNIKA</label>
-                    <input type="text" id="naslov"/>
+                    <input type="text" placeholder="Vnesite naslov plačnika" id="naslov"/>
                     <div id="arrive-res"></div>
                 </div>
             </div>
 
+
             <div id="flight-depart">
                 <div class="info-box">
-                    <label for="">MESTO</label>
-                    <input type="text" id="mesto" required/>
+                    <label for="">MESTO IN POŠTNA ŠTEVILKA</label>
+                    <input type="text" placeholder="Mesto, poštna številka plačnika" id="mesto" required/>
                     <div id="depart-res"></div>
                 </div>
                 <div class="info-box" id="arrive-box">
                     <label for="">DRŽAVA</label>
-                    <input type="text" id="drzava" required/>
+                    <input type="text" placeholder="Vnesite državo plačnika" id="drzava" required/>
                     <div id="arrive-res"></div>
                 </div>
             </div>
+
+                <div id="flight-depart">
+                    <div class="info-box">
+                        <label for="">E-pošta</label>
+                        <input type="email" name="email" placeholder="Vnesite epošto kamor želite prejeti povratne informacije" required id="email"  />
+                        <div id="depart-res"></div>
+                    </div>
+
+                </div>
 
             <!-- FROM/TO -->
             <div id="flight-depart">
                 <div class="info-box">
                     <label for="">IME NA KARTICI</label>
-                    <input type="text" id="imeNaKartici" required/>
+                    <input type="text" placeholder="Ime in priimek na kartici plačnika" id="imeNaKartici" required/>
                     <div id="depart-res"></div>
                 </div>
                 <div class="info-box" id="arrive-box">
@@ -69,7 +79,7 @@
 
                 <div class="info-box" id="arrive-box">
                     <label for="cc-csc">CVV</label>
-                    <input type="tel" id="cvv" inputmode="numeric" pattern="[0-9\s]{3}" autocomplete="cc-csc" maxlength="3"/>
+                    <input type="tel" id="cvv" placeholder="3 mestna cvv koda" inputmode="numeric" pattern="[0-9\s]{3}" autocomplete="cc-csc" maxlength="3"/>
                     <div id="arrive-res"></div>
                 </div>
             </div>
@@ -92,7 +102,7 @@
 
 <script>
     function myFunction() {
-        alert("Rezervacija je potrjena!");
+        alert("Rezervacija je potrjena! Vse informacije boste prejeli na svojo epošto: " + document.getElementById("email").value);
     }
 
     function myFunction2() {
