@@ -1,17 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title><!DOCTYPE html>
-        <html lang="en">
-
         <head>
             <meta charset="UTF-8">
             <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"/>
             <title>Potniki</title>
             <link rel="stylesheet" href="css/styles.css">
         </head>
-
 <body>
 
 <div id="search-form">
@@ -20,35 +14,36 @@
     </div>
     <section>
         <div class="flight" id="flightbox">
+            <form id="flight-form">
+                <div id="flight-type">
+                    <div class="info-box">
+                        <input type="radio" name="time" value="Morning" id="morning" checked/>
+                        <label for="return">JUTRANJI LET</label>
+                    </div>
+                    <div class="info-box">
+                        <input type="radio" name="time" value="Noon" id="noon"/>
+                        <label for="one-way">OPOLDANSKI LET</label>
+                    </div>
+                    <div class="info-box">
+                        <input type="radio" name="time" value="Evening" id="evening" checked/>
+                        <label for="return">VEČERNI LET</label>
+                    </div>
+                </div>
 
-            <div id="flight-type">
-                <div class="info-box">
-                    <input type="radio" name="time" value="Morning" id="morning" checked/>
-                    <label for="return">JUTRANJI LET</label>
-                </div>
-                <div class="info-box">
-                    <input type="radio" name="time" value="Noon" id="noon"/>
-                    <label for="one-way">OPOLDANSKI LET</label>
-                </div>
-                <div class="info-box">
-                    <input type="radio" name="time" value="Evening" id="evening" checked/>
-                    <label for="return">VEČERSKI LET</label>
-                </div>
-            </div>
 
-
-            <!-- SEARCH BUTTON -->
-            <div id="flight-search">
-                <div class="info-box">
-                    <input type="submit" id="search-flight" value="POTRDI" onclick="location.href='payment.html'"/>
+                <!-- SEARCH BUTTON -->
+                <div id="flight-search">
+                    <div class="info-box">
+                        <input type="submit" id="search-flight" value="SHRANI" />
+                    </div>
                 </div>
-            </div>
 
-            <div id="flight-search2">
-                <div class="info-box">
-                    <input type="reset" id="search-flight" value="POČISTI POLJA"/>
+                <div id="flight-search2">
+                    <div class="info-box">
+                        <input type="reset" id="clear-flight" value="POČISTI POLJA"/>
+                    </div>
                 </div>
-            </div>
+        </form>
 
         </div>
     </section>
@@ -64,44 +59,64 @@
 
 </div>
 <div id="confirm"></div>
-
-
+<div id="showButton2" style="display: none">
+    <button onclick="location.href='payment.html'" type="button"
+            style="background: #55AF3A; color: white; height: 50px;font-size: 1.2em; width: 700px">PLAČAJ
+    </button>
+</div>
 </body>
 <script>
-    const departFrom = sessionStorage.getItem("departFrom");
+    const _id = (elem) => document.getElementById(elem);
+    var departFrom = sessionStorage.getItem("departFrom");
     //document.write(departFrom);
-    const adults = +sessionStorage.getItem("adults");  // + pred stringom, je isto kot parseInt(string)
-    const children = +sessionStorage.getItem("children"); // + pred stringom, je isto kot parseInt(string)
-    const passengers = adults + children;
+    var arrivingAt = sessionStorage.getItem("arrivingAt");
+    var leavingOn = sessionStorage.getItem("leavingOn");
+    var returningOn = sessionStorage.getItem("returningOn");
+    var classType = sessionStorage.getItem("classType");
+    var adults = +sessionStorage.getItem("adults");  // + pred stringom, je isto kot parseInt(string)
+    var children = +sessionStorage.getItem("children"); // + pred stringom, je isto kot parseInt(string)
+    var passengers = adults + children;
+
+    const shrani = _id("search-flight");
+    shrani.addEventListener("click", onSave);
 
     //document.write(passengers.toString());
 
-    function singlePassenger(_, idx) {
+
+
+    function singlePassenger(idx) {
         const wrapper = document.createElement('div');
         wrapper.innerHTML = `\n                <!-- FROM/TO -->
         <div id="flight-depart">
         <div class="info-box">
         <label for="">IME</label>
-        <input type="text" id="ime.${idx}" />
+        <input type="text" placeholder="Vnesite ime" id="ime.${idx}" />
         </div>
         <div class="info-box" id="arrive-box">
         <label for="">PRIIMEK</label>
-        <input type="text" id="priimek.${idx}" />
+        <input type="text" placeholder="Vnesite priimek" id="priimek.${idx}" />
         </div>
         </div>
-
         <div id="flight-depart">
         <div class="info-box">
         <label for="">ŠTEVILKA POTNEGA LISTA</label>
-        <input type="text" id="potniList.${idx}" />
+        <input type="text" placeholder="Vnesite številko potnega lista" id="potniList.${idx}" />
         </div>
         <div class="info-box" id="arrive-box">
         <label for="">NASLOV</label>
-        <input type="text" id="naslov.${idx}" />
+        <input type="text" placeholder="Vnesite naslov" id="naslov.${idx}" />
         </div>
         </div>
-
-
+        <div id="flight-depart">
+        <div class="info-box">
+        <label for="">MESTO IN POŠTNA ŠTEVILKA</label>
+        <input type="text" placeholder="Mesto, poštna številka" id="mesto.${idx}" />
+         </div>
+         <div class="info-box" id="arrive-box">
+         <label for="">DRŽAVA</label>
+         <input type="text" placeholder="Vnesite državo" id="drzava.${idx}" />
+         </div>
+         </div>
             <!-- TRIP TYPE -->
         <div id="flight-type">
         <div class="info-box">
@@ -126,8 +141,75 @@
         return wrapper;
     }
 
+    function convertDate(d) {
+        return new Date(d).toString().substr(0, 15);
+    }
+
+    function getPassengerData() {
+        let txt = '<h3>Izbrani let:</h3>';
+        txt += '<p>Odhod bo <strong>' + convertDate(leavingOn) + '</strong> iz <strong>' + departFrom + '</strong>';
+        if (returningOn.length > 1) {
+            txt += '<p>Vračilo leta bo <strong>' + convertDate(returningOn) + '</strong> iz <strong>' + arrivingAt + '</strong></p>';
+        } else {
+            txt += ' pristanek bo <strong>' + arrivingAt + '</strong></p>';
+        }
+        txt += '<p>Letite s <strong>' + classType + '</strong> s <strong>' + adults + '</strong> odraslimi in <strong>' + children + '</strong> otrokom.</p>';
+        return txt;
+    }
+
+    const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+
+
+    function onSave(e) {
+        e.preventDefault();
+        let txt = getPassengerData();
+        txt += '<h3>Podatki o potnikih:</h3>';
+
+        let prtljaga = 0;
+        [...Array(passengers)].forEach((_,passengerNumber) => {
+            const name = _id('ime.' + passengerNumber).value;
+            const surname = _id('priimek.' + passengerNumber).value;
+            const passport = _id('potniList.' + passengerNumber).value;
+            const address = _id('naslov.' + passengerNumber).value;
+            const city = _id('mesto.' + passengerNumber).value;
+            const country = _id('drzava.' + passengerNumber).value;
+            const hasBaggage = _id('baggage.' + passengerNumber).checked;
+            if (hasBaggage) {
+                prtljaga += 1;
+            }
+            const isVegan = _id('vegan.' + passengerNumber).checked;
+            txt += `<hr/><p>Ime in priimek: <strong>${name} ${surname}</strong></p>
+            <p>Naslov: <strong>${address}, ${city}, ${country}</strong></p>
+            <p>Št. potnega lista: <strong>${passport}</strong></p>
+            <p>Dodatna prtljaga: <strong>${hasBaggage ? 'DA' : 'NE'}</strong></p>
+            <p>Obrok: <strong>${isVegan ? 'Veganski' : 'Mesni'}</strong></p>
+            <hr/>
+            `;
+        });
+
+        let cena = 0;
+        if (classType.includes('Ekonomskim')) {
+            cena = getRandomInt(100, 700);
+        } else if (classType.includes('Poslovnim')) {
+            cena = getRandomInt(700,2000);
+        } else if (classType.includes('Prvim')) {
+            cena = getRandomInt(2000, 5000);
+        }
+        let skupna = cena*passengers;
+
+        txt += `<h3>Račun: </h3>`;
+        txt += `<p>Relacija: ${departFrom}-${arrivingAt}<br/>
+        Tip leta: ${classType} <strong>${cena}€</strong> na osebo.<br/>
+        Dodatna prtljaga: <strong>+${prtljaga}x50€</p>
+        <p>Skupaj za ${passengers} osebe, s vključeno prtljago: ${skupna+(prtljaga*50)}</strong></p>`;
+        _id('confirm').style.opacity = 1;
+        _id('confirm').innerHTML = txt;
+        _id('showButton2').style.display = "block";
+    }
+
         function renderForm(numberOfPassengers) {
-            const arrFields = [...Array(numberOfPassengers)].map(singlePassenger);
+            const arrFields = [...Array(numberOfPassengers)].map((_,idx) => singlePassenger(idx));
             arrFields.forEach(form => document.getElementById('flightbox').prepend(form));
         }
 
