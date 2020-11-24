@@ -1,238 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"/>
-            <title>Potniki</title>
-            <link rel="stylesheet" href="css/styles.css">
-        </head>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"/>
+    <title>Plačilo</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
 <body>
 
 <div id="search-form">
     <div id="header">
-        <h1>POTNIKI</h1>
+        <h1>PLAČILO S KARTICO</h1>
     </div>
     <section>
         <div class="flight" id="flightbox">
-            <form id="flight-form">
-                <div id="flight-type">
+            <form id="flight-form" onsubmit="myFunction()">
+
+            <!-- FROM/TO -->
+            <div id="flight-depart">
+                <div class="info-box">
+                    <label for="">POLNO IME PLAČNIKA</label>
+                    <input type="text" placeholder="Vnesite ime in priimek plačnik" id="ime" required/>
+                    <div id="depart-res"></div>
+                </div>
+                <div class="info-box" id="arrive-box">
+                    <label for="">NASLOV PLAČNIKA</label>
+                    <input type="text" placeholder="Vnesite naslov plačnika" id="naslov"/>
+                    <div id="arrive-res"></div>
+                </div>
+            </div>
+
+
+            <div id="flight-depart">
+                <div class="info-box">
+                    <label for="">MESTO IN POŠTNA ŠTEVILKA</label>
+                    <input type="text" placeholder="Mesto, poštna številka plačnika" id="mesto" required/>
+                    <div id="depart-res"></div>
+                </div>
+                <div class="info-box" id="arrive-box">
+                    <label for="">DRŽAVA</label>
+                    <input type="text" placeholder="Vnesite državo plačnika" id="drzava" required/>
+                    <div id="arrive-res"></div>
+                </div>
+            </div>
+
+                <div id="flight-depart">
                     <div class="info-box">
-                        <input type="radio" name="time" value="jutranji" id="morning" checked/>
-                        <label for="return">JUTRANJI LET</label>
+                        <label for="">E-pošta</label>
+                        <input type="email" name="email" placeholder="Vnesite epošto kamor želite prejeti povratne informacije" required id="email"  />
+                        <div id="depart-res"></div>
                     </div>
-                    <div class="info-box">
-                        <input type="radio" name="time" value="opoldanski" id="noon"/>
-                        <label for="one-way">OPOLDANSKI LET</label>
-                    </div>
-                    <div class="info-box">
-                        <input type="radio" name="time" value="opoldanski" id="noon"/>
-                        <label for="one-way">POPOLDANSKI LET</label>
-                    </div>
-                    <div class="info-box">
-                        <input type="radio" name="time" value="večerni" id="evening" />
-                        <label for="return">VEČERNI LET</label>
-                    </div>
+
                 </div>
 
+            <!-- FROM/TO -->
+            <div id="flight-depart">
+                <div class="info-box">
+                    <label for="">IME NA KARTICI</label>
+                    <input type="text" placeholder="Ime in priimek na kartici plačnika" id="imeNaKartici" required/>
+                    <div id="depart-res"></div>
+                </div>
+                <div class="info-box" id="arrive-box">
+                    <label for="cc-number">ŠTEVILKA BANČNE KARTICE</label>
+                    <input type="text" id="creditCard"
+                           placeholder="0000-0000-0000-0000"
+                           onkeyup="myFunction2()"
+                           pattern="([0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4})" maxlength="19" required>
+                    <div id="arrive-res"></div>
+                </div>
+            </div>
 
-                <!-- SEARCH BUTTON -->
-                <div id="flight-search">
-                    <div class="info-box">
-                        <input type="submit" id="search-flight" value="SHRANI"  />
-                    </div>
+            <div id="flight-depart">
+                <div class="info-box">
+                    <label for="">MESEC IN LETO EKSPIRACIJE KARTICE</label>
+                    <input type="month" id="exp" required min="2020-11"/>
+                    <div id="depart-res"></div>
                 </div>
 
-                <div id="flight-search2">
-                    <div class="info-box">
-                        <input type="reset" id="clear-flight" value="POČISTI POLJA"/>
-                    </div>
+                <div class="info-box" id="arrive-box">
+                    <label for="cc-csc">CVV</label>
+                    <input type="tel" id="cvv" placeholder="3 mestna cvv koda" inputmode="numeric" pattern="[0-9\s]{3}" autocomplete="cc-csc" maxlength="3"/>
+                    <div id="arrive-res"></div>
                 </div>
-        </form>
+            </div>
+            <div id="flight-search">
+                <div class="info-box">
+                    <input type="submit" id="search-flight" value="POTRDI" />
+                </div>
+            </div>
 
+            <div id="flight-search2">
+                <div class="info-box">
+                    <input type="reset" id="search-flight" value="POČISTI POLJA"/>
+                </div>
+            </div>
+            </form>
         </div>
+
     </section>
-
-    <div id="calender">
-        <button id="prev">
-        </button>
-        <p><span id="month"></span>
-            <span id="year"></span></p>
-        <button id="next"></button>
-        <table id="cal"></table>
-    </div>
-
 </div>
-<div id="confirm"></div>
-<div id="showButton2" style="display: none">
-    <button onclick="location.href='payment.html'" type="button"
-            style="background: #55AF3A; color: white; height: 50px;font-size: 1.2em; width: 700px">POJDI NA PLAČILO
-    </button>
-</div>
-</body>
+
 <script>
-    const _id = (elem) => document.getElementById(elem);
-    var departFrom = sessionStorage.getItem("departFrom");
-    //document.write(departFrom);
-    var arrivingAt = sessionStorage.getItem("arrivingAt");
-    var leavingOn = sessionStorage.getItem("leavingOn");
-    var returningOn = sessionStorage.getItem("returningOn");
-    var classType = sessionStorage.getItem("classType");
-    var adults = +sessionStorage.getItem("adults");  // + pred stringom, je isto kot parseInt(string)
-    var children = +sessionStorage.getItem("children"); // + pred stringom, je isto kot parseInt(string)
-    var passengers = adults + children;
-
-
-    const shrani = _id("search-flight");
-    shrani.addEventListener("click", onSave);
-
-    //document.write(passengers.toString());
-
-
-
-    function singlePassenger(idx) {
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = `\n                <!-- FROM/TO -->
-        <div id="flight-depart">
-        <div class="info-box">
-        <label for="">IME</label>
-        <input type="text" placeholder="Vnesite ime" id="ime.${idx}" />
-        </div>
-        <div class="info-box" id="arrive-box">
-        <label for="">PRIIMEK</label>
-        <input type="text" placeholder="Vnesite priimek" id="priimek.${idx}" />
-        </div>
-        </div>
-        <div id="flight-depart">
-        <div class="info-box">
-        <label for="">ŠTEVILKA POTNEGA LISTA</label>
-        <input type="text" placeholder="Vnesite številko potnega lista" id="potniList.${idx}" />
-        </div>
-        <div class="info-box" id="arrive-box">
-        <label for="">NASLOV</label>
-        <input type="text" placeholder="Vnesite naslov" id="naslov.${idx}" />
-        </div>
-        </div>
-        <div id="flight-depart">
-        <div class="info-box">
-        <label for="">MESTO IN POŠTNA ŠTEVILKA</label>
-        <input type="text" placeholder="Mesto, poštna številka" id="mesto.${idx}" />
-         </div>
-         <div class="info-box" id="arrive-box">
-         <label for="">DRŽAVA</label>
-         <input type="text" placeholder="Vnesite državo" id="drzava.${idx}" />
-         </div>
-         </div>
-            <!-- TRIP TYPE -->
-        <div id="flight-type">
-        <div class="info-box">
-        <input type="radio" name="baggage.${idx}" id="baggage.${idx}" checked />
-        <label for="baggage.${idx}">DODATNA PRTLJAGA (dodatek 50€)</label>
-        </div>
-        <div class="info-box">
-        <input type="radio" name="baggage.${idx}" id="nobaggage.${idx}" />
-        <label for="nobaggage.${idx}">BREZ DODATNE PRTLJAGE</label>
-        </div>
-        <div class="info-box">
-        <input type="radio" name="food.${idx}" value="vegan" id="vegan.${idx}" checked />
-        <label for="vegan.${idx}">VEGANSKI OBROK</label>
-        </div>
-        <div class="info-box">
-        <input type="radio" name="food.${idx}" value="meat" id="meat.${idx}" />
-        <label for="meat.${idx}">MESNI OBROK</label>
-        </div>
-        </div>
-        `
-        ;
-        return wrapper;
+    function myFunction() {
+        alert("Rezervacija je potrjena! Vse informacije boste prejeli na svojo epošto: " + document.getElementById("email").value);
     }
 
-    function convertDate(d) {
-        return new Date(d).toString().substr(0, 15);
+    function myFunction2() {
+        const x = document.getElementById("creditCard");
+        let creditCard = x.value.split("-").join("");
+        if (creditCard.length > 0) {
+            creditCard = creditCard.match(new RegExp('.{1,4}', 'g')).join("-");
+        }
+        x.value = creditCard;
     }
-
-        function displayRadioValue() {
-            var ele = document.getElementsByName('time');
-
-            for(var i = 0; i < ele.length; i++) {
-                if(ele[i].checked)
-                    document.getElementById("time").innerHTML
-                        = ele[i].value;
-            }
-        }
-
-        function getPassengerData() {
-        let txt = '<h3>Izbrani let:</h3>';
-        txt += '<p>Odhod bo <strong>' + convertDate(leavingOn) + '</strong> iz <strong>' + departFrom + '</strong>';
-        if (returningOn.length > 1) {
-            txt += '<p>Vračilo leta bo <strong>' + convertDate(returningOn) + '</strong> iz <strong>' + arrivingAt + '</strong></p>';
-        } else {
-            txt += ' pristanek bo <strong>' + arrivingAt + '</strong></p>';
-        }
-        txt += '<p>Letite s <strong>' + classType + '</strong> s <strong>' + adults + '</strong> odraslimi in <strong>' + children + '</strong> otrokom.</p>';
-        return txt;
-    }
-
-    const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-
-
-
-    function onSave(e) {
-        e.preventDefault();
-        let txt = getPassengerData();
-        txt += '<h3>Podatki o potnikih:</h3>';
-
-        let prtljaga = 0;
-        [...Array(passengers)].forEach((_,passengerNumber) => {
-            const name = _id('ime.' + passengerNumber).value;
-            const surname = _id('priimek.' + passengerNumber).value;
-            const passport = _id('potniList.' + passengerNumber).value;
-            const address = _id('naslov.' + passengerNumber).value;
-            const city = _id('mesto.' + passengerNumber).value;
-            const country = _id('drzava.' + passengerNumber).value;
-            const hasBaggage = _id('baggage.' + passengerNumber).checked;
-            if (hasBaggage) {
-                prtljaga += 1;
-            }
-            const isVegan = _id('vegan.' + passengerNumber).checked;
-            txt += `<hr/><p>Ime in priimek: <strong>${name} ${surname}</strong></p>
-            <p>Naslov: <strong>${address}, ${city}, ${country}</strong></p>
-            <p>Št. potnega lista: <strong>${passport}</strong></p>
-            <p>Dodatna prtljaga: <strong>${hasBaggage ? 'DA' : 'NE'}</strong></p>
-            <p>Obrok: <strong>${isVegan ? 'Veganski' : 'Mesni'}</strong></p>
-            <hr/>
-            `;
-        });
-
-        let cena = 0;
-        if (classType.includes('Ekonomskim')) {
-            cena = getRandomInt(100, 700);
-        } else if (classType.includes('Poslovnim')) {
-            cena = getRandomInt(700,2000);
-        } else if (classType.includes('Prvim')) {
-            cena = getRandomInt(2000, 5000);
-        }
-        let skupna = cena*passengers;
-
-        txt += `<h3>Račun: </h3>`;
-        txt += `<p>Relacija: ${departFrom}-${arrivingAt}<br/>
-        Tip leta: ${classType} <strong>${cena}€</strong> na osebo.<br/>
-        Dodatna prtljaga: <strong>+${prtljaga}x50€</p>
-        <p>Skupaj za ${passengers} osebe, s vključeno prtljago: ${skupna+(prtljaga*50)}</strong></p>`;
-        _id('confirm').style.opacity = 1;
-        _id('confirm').innerHTML = txt;
-        _id('showButton2').style.display = "block";
-    }
-
-        function renderForm(numberOfPassengers) {
-            const arrFields = [...Array(numberOfPassengers)].map((_,idx) => singlePassenger(idx));
-            arrFields.forEach(form => document.getElementById('flightbox').prepend(form));
-        }
-
-        renderForm(passengers);
 </script>
-</html></title>
-</head>
-<body>
+
+</div>
 
 </body>
 </html>
