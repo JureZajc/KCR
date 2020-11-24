@@ -17,15 +17,19 @@
             <form id="flight-form">
                 <div id="flight-type">
                     <div class="info-box">
-                        <input type="radio" name="time" value="Morning" id="morning" checked/>
+                        <input type="radio" name="time" value="jutranji" id="morning" checked/>
                         <label for="return">JUTRANJI LET</label>
                     </div>
                     <div class="info-box">
-                        <input type="radio" name="time" value="Noon" id="noon"/>
+                        <input type="radio" name="time" value="opoldanski" id="noon"/>
                         <label for="one-way">OPOLDANSKI LET</label>
                     </div>
                     <div class="info-box">
-                        <input type="radio" name="time" value="Evening" id="evening" checked/>
+                        <input type="radio" name="time" value="opoldanski" id="noon"/>
+                        <label for="one-way">POPOLDANSKI LET</label>
+                    </div>
+                    <div class="info-box">
+                        <input type="radio" name="time" value="večerni" id="evening" />
                         <label for="return">VEČERNI LET</label>
                     </div>
                 </div>
@@ -34,7 +38,7 @@
                 <!-- SEARCH BUTTON -->
                 <div id="flight-search">
                     <div class="info-box">
-                        <input type="submit" id="search-flight" value="SHRANI" />
+                        <input type="submit" id="search-flight" value="SHRANI"  />
                     </div>
                 </div>
 
@@ -61,7 +65,7 @@
 <div id="confirm"></div>
 <div id="showButton2" style="display: none">
     <button onclick="location.href='payment.html'" type="button"
-            style="background: #55AF3A; color: white; height: 50px;font-size: 1.2em; width: 700px">PLAČAJ
+            style="background: #55AF3A; color: white; height: 50px;font-size: 1.2em; width: 700px">POJDI NA PLAČILO
     </button>
 </div>
 </body>
@@ -76,6 +80,7 @@
     var adults = +sessionStorage.getItem("adults");  // + pred stringom, je isto kot parseInt(string)
     var children = +sessionStorage.getItem("children"); // + pred stringom, je isto kot parseInt(string)
     var passengers = adults + children;
+
 
     const shrani = _id("search-flight");
     shrani.addEventListener("click", onSave);
@@ -145,7 +150,17 @@
         return new Date(d).toString().substr(0, 15);
     }
 
-    function getPassengerData() {
+        function displayRadioValue() {
+            var ele = document.getElementsByName('time');
+
+            for(var i = 0; i < ele.length; i++) {
+                if(ele[i].checked)
+                    document.getElementById("time").innerHTML
+                        = ele[i].value;
+            }
+        }
+
+        function getPassengerData() {
         let txt = '<h3>Izbrani let:</h3>';
         txt += '<p>Odhod bo <strong>' + convertDate(leavingOn) + '</strong> iz <strong>' + departFrom + '</strong>';
         if (returningOn.length > 1) {
