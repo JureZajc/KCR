@@ -3,8 +3,9 @@
         <head>
             <meta charset="UTF-8">
             <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"/>
-            <title>Potniki</title>
+            <title>Izbira Potnikov</title>
             <link rel="stylesheet" href="css/styles.css">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </head>
 <body>
 
@@ -25,7 +26,7 @@
                         <label for="one-way">OPOLDANSKI LET</label>
                     </div>
                     <div class="info-box">
-                        <input type="radio" name="time" value="opoldanski" id="noon"/>
+                        <input type="radio" name="time" value="popoldanski" id="afternoon"/>
                         <label for="one-way">POPOLDANSKI LET</label>
                     </div>
                     <div class="info-box">
@@ -70,6 +71,8 @@
 </div>
 </body>
 <script>
+    var input;
+    var objekt = {};
     const _id = (elem) => document.getElementById(elem);
     var departFrom = sessionStorage.getItem("departFrom");
     //document.write(departFrom);
@@ -85,6 +88,9 @@
     const shrani = _id("search-flight");
     shrani.addEventListener("click", onSave);
 
+    _id('search-flight').disabled = true;
+    _id('search-flight').classList.add("disabled");
+
     //document.write(passengers.toString());
 
 
@@ -94,32 +100,40 @@
         wrapper.innerHTML = `\n                <!-- FROM/TO -->
         <div id="flight-depart">
         <div class="info-box">
+        <form>
         <label for="">IME</label>
-        <input type="text" placeholder="Vnesite ime" id="ime.${idx}" />
+        <input type="text" required placeholder="Vnesite ime potnika" id="ime.${idx}" />
+        <div id="ime.${idx}.error" class="error">Obvezno polje</div>
         </div>
         <div class="info-box" id="arrive-box">
         <label for="">PRIIMEK</label>
-        <input type="text" placeholder="Vnesite priimek" id="priimek.${idx}" />
+        <input type="text" required placeholder="Vnesite priimek potnika" id="priimek.${idx}" />
+        <div id="priimek.${idx}.error" class="error">Obvezno polje</div>
         </div>
         </div>
         <div id="flight-depart">
         <div class="info-box">
         <label for="">ŠTEVILKA POTNEGA LISTA</label>
-        <input type="text" placeholder="Vnesite številko potnega lista" id="potniList.${idx}" />
+        <input type="text" required placeholder="Vnesite številko potnega lista potnika" id="potniList.${idx}" />
+        <div id="potniList.${idx}.error" class="error">Obvezno polje</div>
         </div>
         <div class="info-box" id="arrive-box">
         <label for="">NASLOV</label>
-        <input type="text" placeholder="Vnesite naslov" id="naslov.${idx}" />
+        <input type="text" required placeholder="Vnesite naslov potnika" id="naslov.${idx}" />
+        <div id="naslov.${idx}.error" class="error">Obvezno polje</div>
         </div>
         </div>
+        </form>
         <div id="flight-depart">
         <div class="info-box">
         <label for="">MESTO IN POŠTNA ŠTEVILKA</label>
-        <input type="text" placeholder="Mesto, poštna številka" id="mesto.${idx}" />
+        <input type="text" required placeholder="Mesto, poštna številka" id="mesto.${idx}" />
+        <div id="mesto.${idx}.error" class="error">Obvezno polje</div>
          </div>
          <div class="info-box" id="arrive-box">
          <label for="">DRŽAVA</label>
-         <input type="text" placeholder="Vnesite državo" id="drzava.${idx}" />
+         <input type="text" required placeholder="Vnesite državo" id="drzava.${idx}" />
+        <div id="drzava.${idx}.error" class="error">Obvezno polje</div>
          </div>
          </div>
             <!-- TRIP TYPE -->
@@ -133,33 +147,20 @@
         <label for="nobaggage.${idx}">BREZ DODATNE PRTLJAGE</label>
         </div>
         <div class="info-box">
-        <input type="radio" name="food.${idx}" value="vegan" id="vegan.${idx}" checked />
-        <label for="vegan.${idx}">VEGANSKI OBROK</label>
-        </div>
-        <div class="info-box">
-        <input type="radio" name="food.${idx}" value="meat" id="meat.${idx}" />
+        <input type="radio" name="food.${idx}" value="meat" id="meat.${idx}" checked/>
         <label for="meat.${idx}">MESNI OBROK</label>
         </div>
+        <div class="info-box">
+        <input type="radio" name="food.${idx}" value="vegan" id="vegan.${idx}"  />
+        <label for="vegan.${idx}">VEGANSKI OBROK</label>
         </div>
-        `
-        ;
+        </div>`;
         return wrapper;
     }
 
     function convertDate(d) {
         return new Date(d).toString().substr(0, 15);
     }
-
-        function displayRadioValue() {
-            var ele = document.getElementsByName('time');
-
-            for(var i = 0; i < ele.length; i++) {
-                if(ele[i].checked)
-                    document.getElementById("time").innerHTML
-                        = ele[i].value;
-            }
-        }
-
         function getPassengerData() {
         let txt = '<h3>Izbrani let:</h3>';
         txt += '<p>Odhod bo <strong>' + convertDate(leavingOn) + '</strong> iz <strong>' + departFrom + '</strong>';
@@ -174,10 +175,37 @@
 
     const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
+    /* function showErrorIfEmpty(idElem, passengerNumber) {
+        const concat = idElem + '.' + passengerNumber;
+        const val = _id(concat).value;
+        if (val.length < 1) {
+            _id(concat).style.border = 'red 1px solid';
+            _id(concat+'.error').style.display = 'block';
+            return 1;
+        } else {
+            _id(concat).style.border = 'none';
+            _id(concat + '.error').style.display = 'none';
+            return 0;
+        }
+    }
 
+
+    function validateFields() {
+        let countError = 0;
+        [...Array(passengers).keys()].forEach(elem => {
+            countError += showErrorIfEmpty('ime', elem);
+            countError += showErrorIfEmpty('priimek',elem);
+            countError += showErrorIfEmpty('potniList', elem);
+            countError += showErrorIfEmpty('naslov', elem);
+            countError += showErrorIfEmpty('mesto', elem);
+            countError += showErrorIfEmpty('drzava', elem);
+        });
+        return countError === 0;
+    } */
 
     function onSave(e) {
         e.preventDefault();
+        /* if (!validateFields()) return false; */
         let txt = getPassengerData();
         txt += '<h3>Podatki o potnikih:</h3>';
 
@@ -213,26 +241,59 @@
         }
         let skupna = cena*passengers;
 
+        let tipLeta = document.querySelector('input[name="time"]:checked').value;
+        txt += `
+            <p>
+                Čas leta: <strong class="capital">${tipLeta}</strong>
+            </p>
+        `;
+
         txt += `<h3>Račun: </h3>`;
-        txt += `<p>Relacija: ${departFrom}-${arrivingAt}<br/>
-        Tip leta: ${classType} <strong>${cena}€</strong> na osebo.<br/>
-        Dodatna prtljaga: <strong>+${prtljaga}x50€</p>
+        txt += `<p>Relacija: ${departFrom}-${arrivingAt}</p>
+        <p>Tip leta: ${classType} <strong>${cena}€</strong> na osebo.</p>
+        <p>Dodatna prtljaga: <strong>+${prtljaga}x50€</p>
         <p>Skupaj za ${passengers} osebe, s vključeno prtljago: ${skupna+(prtljaga*50)}</strong></p>`;
         _id('confirm').style.opacity = 1;
         _id('confirm').innerHTML = txt;
         _id('showButton2').style.display = "block";
     }
 
+    function enableDisableButton() {
+        if (Object.values(objekt).every(elem => elem === 0)) {
+            _id('search-flight').disabled = false;
+            _id('search-flight').classList.remove("disabled");
+        } else {
+            _id('search-flight').disabled = true;
+            _id('search-flight').classList.add("disabled");
+        }
+    }
+
+    function handleInput(e) {
+        const target = e.target || e.srcElement;
+        const elem = document.getElementById(target.id);
+        if (!e.target.value) {
+            objekt[target.id] = 1;
+            console.log(target.id, e.target.value);
+            _id(target.id).classList.add('red-border');
+            _id(target.id + '.error').style.display = 'block';
+        } else {
+            objekt[target.id] = objekt[target.id] > 1 ? objekt[target.id] - 1 : 0;
+            _id(target.id + '.error').style.display = 'none';
+            _id(target.id).classList.remove('red-border');
+        }
+        enableDisableButton();
+    }
+
         function renderForm(numberOfPassengers) {
-            const arrFields = [...Array(numberOfPassengers)].map((_,idx) => singlePassenger(idx));
+            const arrFields = [...Array(numberOfPassengers).keys()].map(singlePassenger);
             arrFields.forEach(form => document.getElementById('flightbox').prepend(form));
+            input = document.querySelectorAll('input[type="text"]');
+            input.forEach(obj => {
+                obj.oninput = handleInput;
+                objekt[obj.id] = 1;
+            });
         }
 
         renderForm(passengers);
 </script>
-</html></title>
-</head>
-<body>
-
-</body>
 </html>
