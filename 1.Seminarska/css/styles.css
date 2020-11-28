@@ -1,172 +1,281 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"/>
-    <title>Plačilo</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
+/* Search Form */
+* {
+  box-sizing: border-box;
+}
 
-<div id="search-form">
-    <div id="header">
-        <h1>PLAČILO S KARTICO</h1>
-    </div>
-    <section>
-        <div class="flight" id="flightbox">
-            <form id="flight-form" onsubmit="myFunction()">
+body {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background: white;
+}
 
-            <!-- FROM/TO -->
-            <div id="flight-depart">
-                <div class="info-box">
-                    <label for="">POLNO IME PLAČNIKA</label>
-                    <input type="text" placeholder="Vnesite ime in priimek plačnika" id="ime" required/>
-                    <div id="depart-res"></div>
-                </div>
-                <div class="info-box" id="arrive-box">
-                    <label for="">NASLOV PLAČNIKA</label>
-                    <input type="text" placeholder="Vnesite naslov plačnika" id="naslov"/>
-                    <div id="arrive-res"></div>
-                </div>
-            </div>
+#search-form {
+  border: 1px solid red;
+  //width: 700px;
+  position: relative;
+  width: 40%;
+}
 
+#header {
+  height: 80px;
+  background: red;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
 
-            <div id="flight-depart">
-                <div class="info-box">
-                    <label for="">MESTO IN POŠTNA ŠTEVILKA</label>
-                    <input type="text" placeholder="Mesto, poštna številka plačnika" id="mesto" required/>
-                    <div id="depart-res"></div>
-                </div>
-                <div class="info-box" id="arrive-box">
-                    <label for="">DRŽAVA</label>
-                    <input type="text" placeholder="Vnesite državo plačnika" id="drzava" required/>
-                    <div id="arrive-res"></div>
-                </div>
-            </div>
+#header h1 {
+  color: #fff;
+  margin-left: 20px;
+  font-size: 1.3em;
+}
 
-                <div id="flight-depart">
-                    <div class="info-box">
-                        <label for="">E-pošta</label>
-                        <input type="email" name="email" placeholder="Vnesite epošto kamor želite prejeti povratne informacije" required id="email"  />
-                        <div id="depart-res"></div>
-                    </div>
+.flight {
+  padding: 20px;
+}
 
-                </div>
+.flight input,
+select {
+  color: #6b6a6a;
+}
 
-            <!-- FROM/TO -->
-            <div id="flight-depart">
-                <div class="info-box">
-                    <label for="">IME NA KARTICI</label>
-                    <input type="text" placeholder="Ime in priimek na kartici plačnika" id="imeNaKartici" required/>
-                    <div id="depart-res"></div>
-                </div>
-                <div class="info-box" id="arrive-box">
-                    <label for="cc-number">ŠTEVILKA BANČNE KARTICE</label>
-                    <input type="text" id="creditCard"
-                           placeholder="0000-0000-0000-0000"
-                           onkeyup="myFunction2()"
-                           pattern="([0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4})" maxlength="19" required>
-                    <div id="arrive-res"></div>
-                </div>
-            </div>
+.info-box {
+  padding: 10px 0;
+  margin-top: 20px;
+  flex: 1;
+  border-right: 20px solid transparent;
+}
 
-            <div id="flight-depart">
-                <div class="info-box">
-                    <label for="">MESEC IN LETO EKSPIRACIJE KARTICE</label>
-                    <input type="month" id="exp" required min="2020-12"/>
-                    <div id="depart-res"></div>
-                </div>
+.info-box:last-child {
+  border-right: none;
+}
 
-                <div class="info-box" id="arrive-box">
-                    <label for="cc-csc">CVV</label>
-                    <input type="tel" id="cvv" placeholder="3 mestna cvv koda" inputmode="numeric" pattern="[0-9\s]{3}" autocomplete="cc-csc" maxlength="3"/>
-                    <div id="arrive-res"></div>
-                </div>
-            </div>
-            <div id="flight-search">
-                <div class="info-box">
-                    <input type="submit" id="search-flight" value="POTRDI" />
-                </div>
-            </div>
+.capital {
+  text-transform: capitalize;
+}
 
-            <div id="flight-search2">
-                <div class="info-box">
-                    <input type="reset" id="search-flight" value="POČISTI POLJA"/>
-                </div>
-            </div>
-            </form>
-        </div>
+.red-border {
+  border: red 1px solid !important;
+}
 
-    </section>
-</div>
+.disabled {
+  opacity: 0.75;
+}
 
-<script>
-    function _(id) {
-        return document.getElementById(id);
-    }
+.errorMessage {
+  color: red;
+  font-size: 12px;
+}
 
+.error {
+  color: red;
+  font-size: 12px;
+  display: none;
+}
 
+.info-box label {
+  display: block;
+  color: #6b6a6a;
+  font-size: 0.9em;
+}
 
-    function createErrorElement(id) {
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = `<div id="${id}.errorMsg" class="errorMessage">Obvezno polje</div>`;
-        return wrapper;
-    }
-    let input = document.querySelectorAll('input:not([id="search-flight"])');
-    var objekt = {};
-    input.forEach(elem => {
-        objekt[elem.id] = 1;
-    });
-    function handleInput(e) {
-        const target = e.target || e.srcElement;
-        const elem = document.getElementById(target.id);
-        if (!e.target.value) {
-            objekt[target.id] = 1;
-            const errorElement = createErrorElement(target.id);
-            elem.insertAdjacentElement("afterend", errorElement);
-            elem.classList.add("red-border");
-        } else {
-            objekt[target.id] = objekt[target.id] > 1 ? objekt[target.id] - 1 : 0;
-            _(target.id + '.' + 'errorMsg') && _(target.id + '.' + 'errorMsg').remove();
-            elem.classList.remove("red-border");
-        }
-        enableDisableButton();
-    }
-    input.forEach(obj => obj.oninput = handleInput);
+.info-box input[type="text"],
+input[type="submit"],
+input[type="month"],
+input[type="tel"],
+input[type="reset"],
+input[type="email"],
+select {
+  border: none;
+  outline: none;
+  background: #e2e0e0;
+  margin-top: 5px;
+  width: 100%;
+  padding: 5px;
+  height: 30px;
+  border-radius: 3px;
+}
 
-    _('search-flight').disabled = true;
-    _('search-flight').classList.add("disabled");
+#flight-type {
+  display: flex;
+  justify-content: flex-start;
+  border-bottom: 1px dotted silver;
+  width: 100%;
+}
 
-    function enableDisableButton() {
-        console.log(objekt);
-        if (Object.values(objekt).every(elem => elem === 0)) {
-            _('search-flight').disabled = false;
-            _('search-flight').classList.remove("disabled");
-        } else {
-            _('search-flight').disabled = true;
-            _('search-flight').classList.add("disabled");
-        }
-    }
+#flight-type .info-box {
+  flex: 0 1 25%;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
 
+#flight-depart {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dotted silver;
+}
 
+#flight-depart .info-box {
+  position: relative;
+  width: 100%;
+}
 
+#depart-res,
+#arrive-res {
+  position: absolute;
+  background: #ffffff;
+  width: 100%;
+}
 
-    function myFunction() {
-        alert("Rezervacija je potrjena! Vse informacije boste prejeli na svojo epošto: " + document.getElementById("email").value);
-    }
+#depart-res p,
+#arrive-res p {
+  padding: 7px 2px;
+  border-bottom: 1px dotted silver;
+  width: 100%;
+}
 
-    function myFunction2() {
-        const x = document.getElementById("creditCard");
-        let creditCard = x.value.split("-").join("");
-        if (creditCard.length > 0) {
-            creditCard = creditCard.match(new RegExp('.{1,4}', 'g')).join("-");
-        }
-        x.value = creditCard;
-    }
-</script>
+#depart-res p:hover,
+#arrive-res p:hover {
+  background: #ededed;
+  cursor: pointer;
+  width: 100%;
+}
 
-</div>
+#flight-dates {
+  display: flex;
+  border-bottom: 1px dotted silver;
+  width: 100%;
+}
 
-</body>
-</html>
+#flight-info {
+  display: flex;
+  border-bottom: 1px dotted silver;
+  width: 100%;
+}
+
+#flight-search .info-box {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+#flight-search input[type="submit"] {
+  background: #55af3a;
+  color: white;
+  padding: 0;
+  height: 50px;
+  font-size: 1.2em;
+  width: 100%;
+}
+
+#flight-search2 input[type="reset"] {
+  background: red;
+  color: white;
+  padding: 0;
+  height: 50px;
+  font-size: 1.2em;
+  width: 100%;
+}
+
+/* Calender */
+#calender {
+  border: 3px solid red;
+  padding: 5px;
+  opacity: 0;
+  background: #ffffff;
+  position: absolute;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+#calender .nav {
+  padding: 3px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+#calender .nav button {
+  background: #ff3240;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  padding: 5px 8px;
+  font-weight: 600;
+  border-radius: 3px;
+}
+
+table {
+  border: 1px solid #dbdbdb;
+  background: #f4f4f4;
+  width: 100%;
+}
+
+table td {
+  border: 1px solid #dbdbdb;
+  padding: 5px;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.normal {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.today {
+  background: #ff3240;
+  color: #ffffff;
+}
+
+.closed {
+  color: #dbdbdb;
+  cursor: default;
+}
+
+.picked {
+  background: green;
+}
+
+#month {
+  display: inline-block;
+}
+
+#confirm {
+  width: 500px;
+  padding: 20px;
+  border: 5px solid #55af3a;
+  margin: 20px auto;
+  opacity: 0;
+}
+
+#confirm h3 {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+#confirm p {
+  padding: 10px;
+}
+
+#confirm strong {
+  font-weight: 600;
+}
+
+.expiration {
+  border: 1px solid #bbb;
+  background: #ededed;
+}
+
+.expiration input {
+  border: 0;
+  text-align: center;
+  outline: 0; /* remove if you want input highlight */
+}
