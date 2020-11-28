@@ -2,8 +2,9 @@
 <html lang="si">
 <head>
     <meta charset="UTF-8">
-    <title>Iskanje letov KCR</title>
+    <title>Iskanje Letov</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
 
 </head>
@@ -17,7 +18,7 @@
     <section>
         <div class="flight" id="flightbox">
 
-            <form id="flight-form">
+            <form id="flight-form" onsubmit="showButton()">
                 <!-- TRIP TYPE -->
                 <div id="flight-type">
                     <div class="info-box">
@@ -34,12 +35,12 @@
                 <div id="flight-depart">
                     <div class="info-box">
                         <label for="">ODHOD IZ KRAJA</label>
-                        <input type="text" id="dep-from" required/>
+                        <input type="text" id="dep-from" placeholder="Iz katerega kraja želite potovati" required/>
                         <div id="depart-res"></div>
                     </div>
                     <div class="info-box" id="arrive-box">
                         <label for="">PRIHOD V KRAJ</label>
-                        <input type="text" id="dep-to" required/>
+                        <input type="text" id="dep-to" placeholder="Kraj prihoda" required/>
                         <div id="arrive-res"></div>
                     </div>
                 </div>
@@ -48,11 +49,11 @@
                 <div id="flight-dates">
                     <div class="info-box">
                         <label for="">ODHOD LETA</label>
-                        <input type="text" id="leave-date" readonly required/>
+                        <input type="text" id="leave-date" required autocomplete="off"/>
                     </div>
                     <div class="info-box" id="return-box">
                         <label for="">VRAČILO LETA</label>
-                        <input type="text" id="return-date" readonly/>
+                        <input type="text" id="return-date" required autocomplete="off"/>
                     </div>
                 </div>
 
@@ -90,10 +91,12 @@
                     </div>
                 </div>
 
+
+
                 <!-- SEARCH BUTTON -->
                 <div id="flight-search">
                     <div class="info-box">
-                        <input type="submit" id="search-flight" value="POIŠČI LETE" onclick="showButton()"/>
+                        <input type="submit" id="search-flight" value="POIŠČI LETE" />
                     </div>
                 </div>
 
@@ -121,8 +124,9 @@
 <div id="confirm"></div>
 
 
+
 <div id="showButton2" style="display: none">
-    <button onclick="location.href='passengers.html'" type="button"
+    <button onclick="location.href='passengers3.html'" type="button"
             style="background: #55AF3A; color: white; height: 50px;font-size: 1.2em; width: 700px">POTRDI
     </button>
 </div>
