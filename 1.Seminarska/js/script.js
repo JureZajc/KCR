@@ -14,13 +14,55 @@ let table = _('cal');
 let cal = _('calender');
 let xhr = new XMLHttpRequest();
 let fromTo = 'from';
+var inputError = 0;
+var inputSuccess = 0;
+
+function createErrorElement(id) {
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = `<div id="${id}.errorMsg" class="errorMessage">Obvezno polje</div>`;
+    return wrapper;
+}
+
+let input = document.querySelectorAll('input[type="text"]');
+var objekt = {};
+input.forEach(elem => {
+    objekt[elem.id] = 1;
+});
+function handleInput(e) {
+    const target = e.target || e.srcElement;
+    const elem = document.getElementById(target.id);
+    if (!e.target.value) {
+        objekt[target.id] = 1;
+        const errorElement = createErrorElement(target.id);
+        elem.insertAdjacentElement("afterend", errorElement);
+        elem.classList.add("red-border");
+    } else {
+        objekt[target.id] = objekt[target.id] > 1 ? objekt[target.id] - 1 : 0;
+        _(target.id + '.' + 'errorMsg') && _(target.id + '.' + 'errorMsg').remove();
+        elem.classList.remove("red-border");
+    }
+    enableDisableButton();
+}
+input.forEach(obj => obj.oninput = handleInput);
+
+_('search-flight').disabled = true;
+_('search-flight').classList.add("disabled");
+
+function enableDisableButton() {
+    if (Object.values(objekt).every(elem => elem === 0)) {
+        _('search-flight').disabled = false;
+        _('search-flight').classList.remove("disabled");
+    } else {
+        _('search-flight').disabled = true;
+        _('search-flight').classList.add("disabled");
+    }
+}
+
 
 _('month').innerHTML = months[month];
 _('year').innerHTML = year;
 _('prev').addEventListener('click', () => trackMonth('prev'));
 _('next').addEventListener('click', () => trackMonth('next'));
-_('dep-from').addEventListener('keyup', searchCities);
-_('dep-to').addEventListener('keyup', searchCities);
 _('dep-from').addEventListener('focus', () => whichCityBox('from'));
 _('dep-to').addEventListener('focus', () => whichCityBox('to'));
 _('one-way').addEventListener('click', () => toggleReturnBox('one-way'));
@@ -63,6 +105,7 @@ function onSubmit(e) {
     let children = form.elements[7].value;
     let classType = form.elements[8].value;
 
+
     if (returnTrip.checked === true) txt += '<p>To je <strong>Povratni</strong> polet.</p>';
     if (onewayTrip.checked === true) txt += '<p>To je <strong>Enosmerni</strong> polet.</p>';
     txt += '<p>Odhod bo <strong>' + convertDate(leavingOn) + '</strong> iz <strong>' + departFrom + '</strong>';
@@ -72,6 +115,7 @@ function onSubmit(e) {
         txt += ' pristanek bo <strong>' + arrivingAt + '</strong></p>';
     }
     txt += '<p>Letite s <strong>' + classType + '</strong> s <strong>' + adults + '</strong> odraslimi in <strong>' + children + '</strong> otrokom.</p>';
+
     _('confirm').style.opacity = 1;
     _('confirm').innerHTML = txt;
     //this.reset();
@@ -108,45 +152,6 @@ function addFromCity(o) {
 function addToCity(o) {
     _('dep-to').value = o.innerText;
     _('arrive-res').style.display = 'none';
-}
-
-function searchCities(e) {
-    console.log(fromTo);
-    let query = e.target.value;
-    let url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=' + query + '&types=(cities)&key=AIzaSyA3sUMaNBtaRTxi8KLraNrYCVga4xK55WE';
-
-    let country = '';
-    let resp;
-
-    xhr.open('GET', url);
-    xhr.send();
-    xhr.onreadystatechange = function () {
-        const DONE = 4; // readyState 4 means the request is done.
-        const OK = 200; // status 200 is a successful return.
-        if (xhr.readyState === DONE) {
-            if (xhr.status === OK)
-                resp = JSON.parse(xhr.responseText);
-            const data = resp.predictions;
-            for (let i = 0; i < data.length; i++) {
-                if (fromTo == 'from') {
-                    country += '<p id="country" onclick="addFromCity(this)">' + data[i].description + '</p>';
-                }
-                if (fromTo == 'to') {
-                    country += '<p id="country" onclick="addToCity(this)">' + data[i].description + '</p>';
-                }
-            }
-
-        } else {
-            console.log('Error: ' + xhr.status); // An error occurred during the request.
-        }
-        if (fromTo == 'from') {
-            _('depart-res').innerHTML = country;
-        }
-        if (fromTo == 'to') {
-            _('arrive-res').innerHTML = country;
-        }
-
-    };
 }
 
 function positionCalender(box) {
@@ -195,11 +200,14 @@ function getCellDate() {
 function fetchDate() {
     let td = this.getAttribute('data-date');
     if (pickedDate == 'leave-date') {
-        _('leave-date').setAttribute('value', td);
+        _('leave-date').value = td;
+        objekt['leave-date'] = 0;
     }
     if (pickedDate == 'return-date') {
         _('return-date').value = td;
+        objekt['return-date'] = 0;
     }
+    enableDisableButton();
     stayOpen = false;
     hideCalender();
 }
