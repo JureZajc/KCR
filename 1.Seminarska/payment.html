@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"/>
     <title>Plačilo</title>
     <link rel="stylesheet" href="css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
@@ -20,7 +21,7 @@
             <div id="flight-depart">
                 <div class="info-box">
                     <label for="">POLNO IME PLAČNIKA</label>
-                    <input type="text" placeholder="Vnesite ime in priimek plačnik" id="ime" required/>
+                    <input type="text" placeholder="Vnesite ime in priimek plačnika" id="ime" required/>
                     <div id="depart-res"></div>
                 </div>
                 <div class="info-box" id="arrive-box">
@@ -73,7 +74,7 @@
             <div id="flight-depart">
                 <div class="info-box">
                     <label for="">MESEC IN LETO EKSPIRACIJE KARTICE</label>
-                    <input type="month" id="exp" required min="2020-11"/>
+                    <input type="month" id="exp" required min="2020-12"/>
                     <div id="depart-res"></div>
                 </div>
 
@@ -101,6 +102,56 @@
 </div>
 
 <script>
+    function _(id) {
+        return document.getElementById(id);
+    }
+
+
+
+    function createErrorElement(id) {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = `<div id="${id}.errorMsg" class="errorMessage">Obvezno polje</div>`;
+        return wrapper;
+    }
+    let input = document.querySelectorAll('input:not([id="search-flight"])');
+    var objekt = {};
+    input.forEach(elem => {
+        objekt[elem.id] = 1;
+    });
+    function handleInput(e) {
+        const target = e.target || e.srcElement;
+        const elem = document.getElementById(target.id);
+        if (!e.target.value) {
+            objekt[target.id] = 1;
+            const errorElement = createErrorElement(target.id);
+            elem.insertAdjacentElement("afterend", errorElement);
+            elem.classList.add("red-border");
+        } else {
+            objekt[target.id] = objekt[target.id] > 1 ? objekt[target.id] - 1 : 0;
+            _(target.id + '.' + 'errorMsg') && _(target.id + '.' + 'errorMsg').remove();
+            elem.classList.remove("red-border");
+        }
+        enableDisableButton();
+    }
+    input.forEach(obj => obj.oninput = handleInput);
+
+    _('search-flight').disabled = true;
+    _('search-flight').classList.add("disabled");
+
+    function enableDisableButton() {
+        console.log(objekt);
+        if (Object.values(objekt).every(elem => elem === 0)) {
+            _('search-flight').disabled = false;
+            _('search-flight').classList.remove("disabled");
+        } else {
+            _('search-flight').disabled = true;
+            _('search-flight').classList.add("disabled");
+        }
+    }
+
+
+
+
     function myFunction() {
         alert("Rezervacija je potrjena! Vse informacije boste prejeli na svojo epošto: " + document.getElementById("email").value);
     }
